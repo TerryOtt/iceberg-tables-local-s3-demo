@@ -5,10 +5,11 @@
 Simplest way I could think to show how to create, read, and write data to.from
 an Apache Iceberg table in Python.
 
-_Note_: This demo uses [Boring Catalog](https://github.com/boringdata/boring-catalog) for
-its Iceberg Catalog. Boring Catalog is a dead-simple system using a single JSON file, 
-which is all that's needed for a proof of concept. No need to start Hive MetaStore or use 
-AWS Glue's Data Catalog and make network connections.
+_Note_: This demo uses [Boring Catalog](https://github.com/boringdata/boring-catalog) for its 
+[Iceberg Catalog](https://medium.com/itversity/iceberg-catalogs-a-guide-for-data-engineers-a6190c7bf381).
+Boring Catalog is a dead-simple catalog solution using a single JSON file. As we are aiming for _simple_,
+Boring Catalog is all that's needed. No need to start Hive MetaStore or use AWS Glue's Data Catalog and 
+make network connections.
 
 Once we have an Iceberg Catalog, 
 [create_local_iceberg_table.py](https://github.com/TerryOtt/simple-iceberg-table-create-readback/blob/main/create_local_iceberg_table.py)
