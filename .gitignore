@@ -1,2 +1,4 @@
 uv.lock
 .*.swp
+.ice/
+iceberg_table/
