@@ -1,5 +1,6 @@
 import boringcatalog
 import polars
+import pyiceberg.table
 
 
 def _main() -> None:
@@ -38,7 +39,7 @@ def _main() -> None:
     #               - Table's unique name within its namespace
     #               - Pointer to current (latest) metadata file
     #           
-    new_iceberg_table: boringcatalog.Table = iceberg_catalog.create_table(
+    new_iceberg_table: pyiceberg.table.Table = iceberg_catalog.create_table(
         "dataset_xyz_namespace.dataset_xyz_table", 
         schema=polars_df.to_arrow().schema
     )
@@ -46,6 +47,8 @@ def _main() -> None:
     # Now write the contents of our Polars dataframe to our Iceberg table, 
     #       using our catalog handle so ACID guarantees are protected
     polars_df.write_iceberg(new_iceberg_table, mode='append')
+
+    # data created with parquet file of data
 
     # Metadata updated with
     #   current table metadata version
