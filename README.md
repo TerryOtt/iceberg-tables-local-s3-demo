@@ -5,7 +5,7 @@
 Simplest way I could think to show how to create, read, and write data to.from
 an Apache Iceberg table in Python.
 
-_Note_: This demo uses [Boring Catalog|https://github.com/boringdata/boring-catalog] for
+_Note_: This demo uses [Boring Catalog](https://github.com/boringdata/boring-catalog) for
 its Iceberg Catalog. Boring Catalog is dead-simple system using a single JSON file, 
 which is all we want for a proof of concept. No need to start Hive MetaStore or use 
 AWS Glue's Data Catalog and make network connections.
