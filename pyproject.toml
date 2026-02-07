@@ -1,7 +1,7 @@
 [project]
-name = "etl"
-version = "0.1.0"
-description = "Add your description here"
+name = "polars-apache-iceberg-create-readback"
+version = "0.1"
+description = "Demonstrate using polars, pyiceberg, and boringcatalog to create and query an Apache Iceberg table"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
