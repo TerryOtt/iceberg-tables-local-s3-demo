@@ -1,11 +1,15 @@
 import json
+import os
 import polars
 import pyiceberg.catalog
 import pyiceberg.table
 
 
-catalog_name: str = "aws_catalog"
+aws_region: str = "us-east-2"
 iceberg_namespace: str = "dataset_xyz_namespace"
+catalog_name: str = os.environ["AWS_ACCOUNT_ID"]
+iceberg_table_name: str = "dataset_xyz_table"
+s3_bucket_path: str = f"s3://{iceberg_table_name}"
 
 def _main() -> None:
     
@@ -23,39 +27,27 @@ def _main() -> None:
         catalog_name,
         **{
             "type"                  : "rest",
-            "uri"                   : "https://glue.us-east-2.amazonaws.com/iceberg",
+            "uri"                   : f"https://glue.{aws_region}.amazonaws.com/iceberg",
             "rest.sigv4-enabled"    : "true",
             "rest.signing-name"     : "glue",
-            "rest.signing-region"   : "us-east-2",
+            "rest.signing-region"   : aws_region,
+            # "warehouse"             : s3_bucket_path,
+            # "s3.region"             : aws_region,
         }
     )
 
     # Create namespace -- this is a catalog ONLY operation,
     iceberg_catalog.create_namespace_if_not_exists(iceberg_namespace)
 
-    print(f"Catalog namespaces:\n{json.dumps(iceberg_catalog.list_namespaces(), indent=4, sort_keys=True)}")
+    print("\nCatalog namespaces (aka, \"AWS Glue Data Catalog Databases\"):\n"
+          f"{json.dumps(iceberg_catalog.list_namespaces()[0], indent=4, sort_keys=True)}")
 
-
-    #
-    # # Create table with required namespace identifier
-    # #
-    # #   NOTE: first operation that actually modifies Iceberg table directory structure
-    # #         creates dataset_xyz_namespace/dataset_xyz_table/metadata/[five digit zero padded version of this table]-[GUID].metadata.json"
-    # #
-    # # Only AFTER filesystem changes are all durably persisted to disk, THEN the catalog
-    # #       is updated. Iceberg operations are atomic, so catalog is only updated when
-    # #       we know FOR SURE all data is safely on disk
-    # #
-    # #       Catalog changes:
-    # #           - New table in "tables" section" with contents
-    # #               - Table namespace
-    # #               - Table's unique name within its namespace
-    # #               - Pointer to current (latest) metadata file
-    # #
+    # Create table with required namespace identifier
     # new_iceberg_table: pyiceberg.table.Table = iceberg_catalog.create_table(
-    #     "dataset_xyz_namespace.dataset_xyz_table",
+    #     f"{iceberg_namespace}.{iceberg_table_name}",
     #     schema=polars_df.to_arrow().schema
     # )
+
     #
     # # Now write the contents of our Polars dataframe to our Iceberg table,
     # #       using our catalog handle so ACID guarantees are protected
