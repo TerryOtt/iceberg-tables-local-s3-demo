@@ -16,9 +16,30 @@ such as
 [AWS Glue Data Catalog](https://docs.aws.amazon.com/prescriptive-guidance/latest/apache-iceberg-on-aws/iceberg-pyiceberg.html).
 
 
+## AWS IAM Permissions
+
+Using AWS Glue for the Iceberg Catalog and S3 for the Iceberg Table requires the following permissions:
+
+* AWS Glue Data Catalog
+    * `glue:CreateDatabase`
+    * `glue:CreateTable`
+    * `glue:DeleteDatabase`
+    * `glue:DeleteTable`
+    * `glue:GetDatabase`
+    * `glue:GetDatabases`
+    * `glue:GetTable`
+    * `glue:GetTables`
+    * `glue:UpdateDatabase`
+    * `glue:UpdateTable`
+
+Create an IAM role with these permissions then set your credentials to assume that role 
+(e.g., Access Key and Secret Access Key). 
+
 ## Usage
 
 _Note_: instructions assume `uv` is already installed in your environment.
+
+### Iceberg Table Stored In Local File System
 
 ```
 $ uv run local_create.py
@@ -39,5 +60,22 @@ BoringTable catalog  : ./data/catalogs/catalog_local.json
 Apache Iceberg table : ./data/iceberg_table
 *********************************************************
 
+
+$ uv run local_query.py
+
+Full table data out of Iceberg:
+
+shape: (3, 3)
+┌───────┬────────┬───────┐
+│ Fruit ┆ Color  ┆ Count │
+│ ---   ┆ ---    ┆ ---   │
+│ str   ┆ str    ┆ i64   │
+╞═══════╪════════╪═══════╡
+│ Apple ┆ Red    ┆ 2     │
+│ Apple ┆ Yellow ┆ 1     │
+│ Pear  ┆ Green  ┆ 1     │
+└───────┴────────┴───────┘
+
+$
 ```
 

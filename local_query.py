@@ -29,7 +29,7 @@ def _main() -> None:
 
     # Prove all the data is there if we need it -- collect() finalizes query plan and pulls data
     polars_fulldata_df: polars.DataFrame = polars_lf.collect()
-    print(f"\nFull table data out of Iceberg:\n{polars_fulldata_df}")
+    print(f"\nFull table data out of Iceberg:\n\n{polars_fulldata_df}")
 
 
 if __name__ == "__main__":
