@@ -7,9 +7,10 @@ import pyiceberg.table
 
 aws_region: str = "us-east-2"
 iceberg_namespace: str = "dataset_xyz_namespace"
-catalog_name: str = os.environ["AWS_ACCOUNT_ID"]
+catalog_name: str = "aws_catalog"
 iceberg_table_name: str = "dataset_xyz_table"
-s3_bucket_path: str = f"s3://{iceberg_table_name}"
+#s3_bucket_path: str = f"s3://{iceberg_table_name}"
+table_s3_bucket_name: str = "firsttracks-net-iceberg-demo"
 
 def _main() -> None:
     
@@ -31,8 +32,9 @@ def _main() -> None:
             "rest.sigv4-enabled"    : "true",
             "rest.signing-name"     : "glue",
             "rest.signing-region"   : aws_region,
-            # "warehouse"             : s3_bucket_path,
-            # "s3.region"             : aws_region,
+            "glue.region"           : aws_region,
+            "warehouse"             : f"{os.environ.get('AWS_ACCOUNT_ID')}:s3tablescatalog/{table_s3_bucket_name}",
+            "s3.region"             : aws_region,
         }
     )
 

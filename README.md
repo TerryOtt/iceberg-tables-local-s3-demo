@@ -42,6 +42,11 @@ Using AWS Glue for the Iceberg Catalog and S3 for the Iceberg Table requires the
     * `glue:GetTables`
     * `glue:UpdateDatabase`
     * `glue:UpdateTable`
+* S3 (Create policy that limits these to the one bucket for this dataset)
+    * `s3:DeleteObject`
+    * `s3:GetObject`
+    * `s3:ListBucket`
+    * `s3:PutObject`
 
 Create an IAM role with these permissions then set your credentials to assume that role 
 (e.g., Access Key and Secret Access Key). 
