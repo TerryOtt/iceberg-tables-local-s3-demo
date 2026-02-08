@@ -3,6 +3,12 @@ import polars
 import pyiceberg.table
 
 
+catalog_name: str = "local"
+data_dir: str = "./data"
+iceberg_dir: str = f"{data_dir}/iceberg_table"
+catalog_json: str = f"{data_dir}/catalogs/catalog_{catalog_name}.json"
+
+
 def _main() -> None:
     
     data: dict[str, list[str | int]] = {
@@ -13,16 +19,17 @@ def _main() -> None:
 
     polars_df: polars.DataFrame = polars.DataFrame(data)
 
-    print(polars_df)
+    print(f"\n{polars_df}")
 
     iceberg_catalog: boringcatalog.BoringCatalog = boringcatalog.BoringCatalog(
-        name="myicebergcatalog", 
-        warehouse="./iceberg_table"
+        name        = catalog_name,
+        warehouse   = iceberg_dir,
+        uri         = catalog_json,
     )
 
     # Create namespace -- this is a catalog ONLY operation,
     #   nothing is created in warehouse dir
-    iceberg_catalog.create_namespace("dataset_xyz_namespace")
+    iceberg_catalog.create_namespace_if_not_exists("dataset_xyz_namespace")
 
     # Create table with required namespace identifier
     #
@@ -53,13 +60,14 @@ def _main() -> None:
     # Metadata updated with
     #   current table metadata version
     #   previous table metadata version
-    #   
-    #   By having metadata with a per-catalog GUID, it allows multiple catalogs to work safely on the same table...
-    #       ...if you're crazy enough to allow that
-        
-    print("Apache Iceberg table created in ./iceberg_table")
+
+    print("\n"
+           "*******************************************************************\n"
+          f"BoringTable catalog  : {catalog_json}\n"
+          f"Apache Iceberg table : {iceberg_dir}\n"
+          "********************************************************************\n"
+          "\n" )
 
 
 if __name__ == "__main__":
     _main()
-
